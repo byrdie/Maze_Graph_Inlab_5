@@ -173,11 +173,11 @@ public class Maze extends JFrame {
         }
         timerFired = false;
         currentTime = System.currentTimeMillis();
-        if((currentTime - startTime) > 50000)
-        {
-            closingMethod();
-        }
-        
+//        if((currentTime - startTime) > 50000)
+//        {
+//            closingMethod();
+//        }
+//        
         //Do not mess with the above part of this method
         
         
@@ -189,16 +189,51 @@ public class Maze extends JFrame {
             mazePanel.setSize(width*SPRITE_WIDTH+10, height*SPRITE_HEIGHT+30);
             maze[y][x] = 'X';   // mark this spot as visited. This is how you can keep track of where you've been. 
 
-
-            /****************************************
-
-               Write your code here
-
-            if (facing.equals("east")) 
-            {    // if guy is facing east .......you will have four cases, east, west, south, north
+            if (facing.equals("east")) {    // if guy is facing east .......you will have four cases, east, west, south, north
+                if(maze[y+1][x] == '.'){
+                    solve(x, y+1, "south");
+                }
+                else if(maze[y][x+1] != '.'){
+                    solve(x, y, "north");
+                }
+                else{
+                    solve(x+1, y, "east");
+                }
             }  
-            ******************************************/
-            solve(x+1, y, "south");
+            else if(facing.equals("north")){
+                if(maze[y][x+1] == '.'){
+                    solve(x+1, y, "east");
+                }
+                else if(maze[y-1][x] != '.'){
+                    solve(x, y, "west");
+                }
+                else{
+                    solve(x, y-1, "north");
+                }
+            }
+            else if(facing.equals("west")){
+                if(maze[y-1][x] == '.'){
+                    solve(x, y-1, "north");
+                }
+                else if(maze[y][x-1] != '.'){
+                    solve(x, y, "south");
+                }
+                else{
+                    solve(x-1, y, "west");
+                }
+            }
+            else{
+                if(maze[y][x-1] == '.'){
+                    solve(x-1, y, "west");
+                }
+                else if(maze[y+1][x] != '.'){
+                    solve(x, y, "east");
+                }
+                else{
+                    solve(x, y+1, "south");
+                }
+            }
+            
             
                 
         }
