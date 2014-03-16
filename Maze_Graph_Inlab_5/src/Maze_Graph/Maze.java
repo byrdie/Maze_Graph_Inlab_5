@@ -188,50 +188,48 @@ public class Maze extends JFrame {
             g2.drawImage(printGuy(facing), x*SPRITE_WIDTH, y*SPRITE_HEIGHT, null, null);
             mazePanel.setSize(width*SPRITE_WIDTH+10, height*SPRITE_HEIGHT+30);
             maze[y][x] = 'X';   // mark this spot as visited. This is how you can keep track of where you've been. 
-
-            if (facing.equals("east")) {    // if guy is facing east .......you will have four cases, east, west, south, north
-                if(maze[y+1][x] == '.' || maze[y+1][x] == 'X'){
-                    solve(x, y+1, "south");
-                }
-                else if(maze[y][x+1] != '.' || maze[y][x+1] != 'X'){
-                    solve(x, y, "north");
-                }
-                else{
-                    solve(x+1, y, "east");
-                }
-            }   
-            else if(facing.equals("north")){
-                if(maze[y][x+1] == '.' || maze[y][x+1] == 'X'){
-                    solve(x+1, y, "east");
-                }
-                else if(maze[y-1][x] != '.' || maze[y-1][x] != 'X'){
-                    solve(x, y, "west");
-                }
-                else{
-                    solve(x, y-1, "north");
-                }
-            }
-            else if(facing.equals("west")){
-                if(maze[y-1][x] == '.' || maze[y-1][x] == 'X'){
-                    solve(x, y-1, "north");
-                }
-                else if(maze[y][x-1] != '.' || maze[y][x-1] != 'X'){
-                    solve(x, y, "south");
-                }
-                else{
-                    solve(x-1, y, "west");
-                }
-            }
-            else{
-                if(maze[y][x-1] == '.' || maze[y][x-1] == 'X'){
-                    solve(x-1, y, "west");
-                }
-                else if(maze[y+1][x] != '.' || maze[y+1][x] != 'X'){
-                    solve(x, y, "east");
-                }
-                else{
-                    solve(x, y+1, "south");
-                }
+            switch (facing) {
+                case "east":
+                    // if guy is facing east .......you will have four cases, east, west, south, north
+                    if(maze[y+1][x] == '.' || maze[y+1][x] == 'X'){     //If the right hand path is open turn right
+                        solve(abs(x), abs(y+1), "south");   //absolute value so he doesnt run off the edge
+                    }
+                    else if(maze[y][x+1] != '.' && maze[y][x+1] != 'X' && maze[y][x+1] != 'F'){    //If the way is shut...turn right 
+                        solve(abs(x), abs(y), "north");
+                    }
+                    else{   //Run!
+                        solve(abs(x+1), abs(y), "east");
+                    }   break;
+                case "north":
+                    if(maze[y][x+1] == '.'  || maze[y][x+1] == 'X'){
+                        solve(abs(x+1), abs(y), "east");
+                    }
+                    else if(maze[y-1][x] != '.' && maze[y-1][x] != 'X' && maze[y-1][x] != 'F'){
+                        solve(abs(x), abs(y), "west");
+                    }
+                    else{
+                        solve(abs(x), abs(y-1), "north");
+                    }   break;
+                case "west":
+                    if(maze[y-1][x] == '.' || maze[y-1][x] == 'X'){
+                        solve(abs(x), abs(y-1), "north");
+                    }
+                    else if(maze[y][x-1] != '.' && maze[y][x-1] != 'X' && maze[y][x-1] != 'F'){
+                        solve(abs(x), abs(y), "south");
+                    }
+                    else{
+                        solve(abs(x-1), abs(y), "west");
+                    }   break;
+                default:
+                    if(maze[y][x-1] == '.' || maze[y][x-1] == 'X'){
+                        solve(abs(x-1), abs(y), "west");
+                    }
+                    else if(maze[y+1][x] != '.' && maze[y+1][x] != 'X' && maze[y+1][x] != 'F'){
+                        solve(abs(x), abs(y), "east");
+                    }
+                    else{
+                        solve(abs(x), abs(y+1), "south");
+                    }   break;
             }
             
         
@@ -249,7 +247,10 @@ public class Maze extends JFrame {
         }        
     }
     
-
+    public int abs(int x)
+{
+    return (x > 0) ? x : -x;
+}
     
     /**
      * Opens a text file containing a maze and stores the data in the 2D char array maze[][].
