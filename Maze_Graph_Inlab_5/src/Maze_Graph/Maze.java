@@ -190,21 +190,21 @@ public class Maze extends JFrame {
             maze[y][x] = 'X';   // mark this spot as visited. This is how you can keep track of where you've been. 
 
             if (facing.equals("east")) {    // if guy is facing east .......you will have four cases, east, west, south, north
-                if(maze[y+1][x] == '.'){
+                if(maze[y+1][x] == '.' || maze[y+1][x] == 'X'){
                     solve(x, y+1, "south");
                 }
-                else if(maze[y][x+1] != '.'){
+                else if(maze[y][x+1] != '.' || maze[y][x+1] != 'X'){
                     solve(x, y, "north");
                 }
                 else{
                     solve(x+1, y, "east");
                 }
-            }  
+            }   
             else if(facing.equals("north")){
-                if(maze[y][x+1] == '.'){
+                if(maze[y][x+1] == '.' || maze[y][x+1] == 'X'){
                     solve(x+1, y, "east");
                 }
-                else if(maze[y-1][x] != '.'){
+                else if(maze[y-1][x] != '.' || maze[y-1][x] != 'X'){
                     solve(x, y, "west");
                 }
                 else{
@@ -212,10 +212,10 @@ public class Maze extends JFrame {
                 }
             }
             else if(facing.equals("west")){
-                if(maze[y-1][x] == '.'){
+                if(maze[y-1][x] == '.' || maze[y-1][x] == 'X'){
                     solve(x, y-1, "north");
                 }
-                else if(maze[y][x-1] != '.'){
+                else if(maze[y][x-1] != '.' || maze[y][x-1] != 'X'){
                     solve(x, y, "south");
                 }
                 else{
@@ -223,10 +223,10 @@ public class Maze extends JFrame {
                 }
             }
             else{
-                if(maze[y][x-1] == '.'){
+                if(maze[y][x-1] == '.' || maze[y][x-1] == 'X'){
                     solve(x-1, y, "west");
                 }
-                else if(maze[y+1][x] != '.'){
+                else if(maze[y+1][x] != '.' || maze[y+1][x] != 'X'){
                     solve(x, y, "east");
                 }
                 else{
@@ -234,7 +234,7 @@ public class Maze extends JFrame {
                 }
             }
             
-            
+        
                 
         }
         else {
