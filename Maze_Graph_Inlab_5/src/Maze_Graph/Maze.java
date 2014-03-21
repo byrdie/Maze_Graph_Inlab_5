@@ -201,7 +201,14 @@ public class Maze extends JFrame {
         
         //Do not mess with the above part of this method
 
-        //Below is where you put your solution to solving the maze.  
+        //Below is where you put your solution to solving the maze.
+        if(x < 0 || x > width || y < 0 || y > height){
+            moveStack.pop();
+            Move move = moveStack.pop();
+            x = move.x;
+            y = move.y;
+            facing = reverseDirection(move.f);
+        }
         if (maze[y][x] != 'F') {  //this is if it doesn't find the finish on a turn.........
             g2.drawImage(mazeImage, null, 0, 0);
             g2.drawImage(printGuy(facing), x * SPRITE_WIDTH, y * SPRITE_HEIGHT, null, null);
@@ -212,11 +219,12 @@ public class Maze extends JFrame {
                 moveStack.push(move);
                 solve(move.x, move.y, move.f);
             } else {
+                try{
                 switch (facing) {
                     case "east":
                         // if guy is facing east .......you will have four cases, east, west, south, north
                         if (maze[y + 1][x] == '.') {     //If the right hand path is open turn right
-                            Move move = new Move(x, y + 1, "south");
+                            Move move = new Move(abs(x), abs(y) + 1, "south");
                             moveStack.push(move);
                             solve(abs(x), abs(y + 1), "south");   //absolute value so he doesnt run off the edge
                         } else if (maze[y + 1][x] == 'X') {
@@ -226,77 +234,77 @@ public class Maze extends JFrame {
                                 stackMove = moveStack.pop();
                             }while(move.x != stackMove.x && move.y != stackMove.y);
                             moveStack.peek().f = facing;
-                            solve(abs(x), abs(y + 1), "south");
+                            solve(abs(x), abs(y) + 1, "south");
                         } else if (maze[y][x + 1] == 'X') {
-                            Move move = new Move(x+1, y, "east");
+                            Move move = new Move(abs(x)+1, abs(y), "east");
                             Move stackMove;
                             do{
                                 stackMove = moveStack.pop();
                             }while(move.x != stackMove.x && move.y != stackMove.y);
                             moveStack.peek().f = facing;
-                            solve(abs(x + 1), abs(y), "east");
+                            solve(abs(x) + 1, abs(y), "east");
                         } else if (maze[y][x + 1] != '.' && maze[y][x + 1] != 'F') {    //If the way is shut...turn right 
                             solve(abs(x), abs(y), "north");
                         } else {   //Run!
                             Move move = new Move(x + 1, y, "east");
                             moveStack.push(move);
-                            solve(abs(x + 1), abs(y), "east");
+                            solve(abs(x) + 1, abs(y), "east");
                         }
                         break;
                     case "north":
                         if (maze[y][x + 1] == '.') {
-                            Move move = new Move(x + 1, y, "east");
+                            Move move = new Move(abs(x) + 1, abs(y), "east");
                             moveStack.push(move);
-                            solve(abs(x + 1), abs(y), "east");
+                            solve(abs(x) + 1, abs(y), "east");
                         } else if (maze[y][x + 1] == 'X') {
-                            Move move = new Move(x+1, y, "east");
+                            Move move = new Move(abs(x)+1, abs(y), "east");
                             Move stackMove;
                             do{
                                 stackMove = moveStack.pop();
                             }while(move.x != stackMove.x && move.y != stackMove.y);
                             moveStack.peek().f = facing;
-                            solve(abs(x + 1), abs(y), "east");
+                            solve(abs(x) + 1, abs(y), "east");
                         } else if (maze[y - 1][x] == 'X') {
-                            Move move = new Move(x, y-1, "north");
+                            Move move = new Move(abs(x), abs(y)-1, "north");
                             Move stackMove;
                             do{
                                 stackMove = moveStack.pop();
                             }while(move.x != stackMove.x && move.y != stackMove.y);
                             moveStack.peek().f = facing;
-                            solve(abs(x), abs(y - 1), "north");                        
+                            solve(abs(x), abs(y) - 1, "north");                        
                         } else if (maze[y - 1][x] != '.' && maze[y - 1][x] != 'F') {
                             solve(abs(x), abs(y), "west");
                         } else {
-                            Move move = new Move(x, y - 1, "north");
+                            Move move = new Move(abs(x), abs(y) - 1, "north");
                             moveStack.push(move);
-                            solve(abs(x), abs(y - 1), "north");
+                            solve(abs(x), abs(y) - 1, "north");
                         }
                         break;
                     case "west":
                         if (maze[y - 1][x] == '.') {
-                            Move move = new Move(x, y - 1, "north");
+                            Move move = new Move(abs(x), abs(y) - 1, "north");
                             moveStack.push(move);
-                            solve(abs(x), abs(y - 1), "north");
+                            solve(abs(x), abs(y) - 1, "north");
                         } else if (maze[y - 1][x] == 'X') {
-                            Move move = new Move(x, y-1, "north");
+                            Move move = new Move(abs(x), abs(y)-1, "north");
                             Move stackMove;
                             do{
                                 stackMove = moveStack.pop();
                             }while(move.x != stackMove.x && move.y != stackMove.y);
                             moveStack.peek().f = facing;
-                            solve(abs(x), abs(y - 1), "north");
+                            solve(abs(x), abs(y) - 1, "north");
                         } else if (maze[y][x - 1] == 'X') {
-                            Move move = new Move(x-1, y, "west");
+                            Move move = new Move(abs(x)-1, abs(y), "west");
                             Move stackMove;
                             do{
                                 stackMove = moveStack.pop();
                             }while(move.x != stackMove.x && move.y != stackMove.y);
                             moveStack.peek().f = facing;
-                            solve(abs(x - 1), abs(y), "west");                        
+                            solve(abs(x) - 1, abs(y), "west");                        
                         } else if (maze[y][x - 1] != '.' && maze[y][x - 1] != 'F') {
                             solve(abs(x), abs(y), "south");
                         } else {
-                            Move move = new Move(x - 1, y, "west");
+                            Move move = new Move(abs(x) - 1, abs(y), "west");
                             moveStack.push(move);
                             solve(abs(x - 1), abs(y), "west");
                         }
@@ -331,7 +339,11 @@ public class Maze extends JFrame {
                         }
                         break;
                 }
-
+                }
+                catch(ArrayIndexOutOfBoundsException e){
+                    closingMethod();
+                }
+             
             }
 
         } else {
