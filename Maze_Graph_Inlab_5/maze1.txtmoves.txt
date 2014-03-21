@@ -1,0 +1,17 @@
+1 2  east
+1 1  north
+2 1  east
+3 1  east
+3 2  south
+3 3  south
+3 4  south
+4 4  east
+4 5  south
+4 6  south
+4 7  south
+4 8  south
+5 8  east
+6 8  east
+6 7  north
+6 6  north
+6 5  north

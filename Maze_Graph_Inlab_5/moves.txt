@@ -1,0 +1,17 @@
+65north
+66north
+67north
+68east
+58east
+48south
+47south
+46south
+45south
+44east
+34south
+33south
+32south
+31east
+21east
+11north
+12east
