@@ -17,6 +17,7 @@ import java.io.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
+import java.util.Stack;
 import javax.swing.*;
 /**
  *
@@ -59,6 +60,10 @@ public class Maze extends JFrame {
     private long startTime;
     private long currentTime;
     
+    /**
+     * Global variables declared by Roy Smart
+     */
+    Stack<Move> moveStack = new Stack();
     
     /**
      * Constructor for class Maze.  Opens a text file containing the maze, then attempts to 
@@ -194,8 +199,12 @@ public class Maze extends JFrame {
                     if(maze[y+1][x] == '.' || maze[y+1][x] == 'X'){     //If the right hand path is open turn right
                         solve(abs(x), abs(y+1), "south");   //absolute value so he doesnt run off the edge
                     }
+                    
                     else if(maze[y][x+1] != '.' && maze[y][x+1] != 'X' && maze[y][x+1] != 'F'){    //If the way is shut...turn right 
                         solve(abs(x), abs(y), "north");
+                    }
+                    else if(maze[y][x+1] == 'X'){
+                        return "east";
                     }
                     else{   //Run!
                         solve(abs(x+1), abs(y), "east");
@@ -244,7 +253,8 @@ public class Maze extends JFrame {
             long finalTime = endTime / 1000;
             System.out.println("Final Time = " + finalTime);
             
-        }        
+        } 
+        return facing;
     }
     
     public int abs(int x)
