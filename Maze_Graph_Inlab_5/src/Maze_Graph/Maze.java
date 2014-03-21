@@ -187,7 +187,8 @@ public class Maze extends JFrame {
         
         
         //Below is where you put your solution to solving the maze.  
-        
+        Move lastMove = new Move(x, y, facing);
+        moveStack.push(lastMove);
         if (maze[y][x] != 'F') {  //this is if it doesn't find the finish on a turn.........
             g2.drawImage(mazeImage, null, 0, 0); 
             g2.drawImage(printGuy(facing), x*SPRITE_WIDTH, y*SPRITE_HEIGHT, null, null);
@@ -196,46 +197,75 @@ public class Maze extends JFrame {
             switch (facing) {
                 case "east":
                     // if guy is facing east .......you will have four cases, east, west, south, north
-                    if(maze[y+1][x] == '.' || maze[y+1][x] == 'X'){     //If the right hand path is open turn right
+                    if(maze[y+1][x] == '.' ){     //If the right hand path is open turn right
                         solve(abs(x), abs(y+1), "south");   //absolute value so he doesnt run off the edge
                     }
-                    
+                    else if(maze[y+1][x] == 'X'){
+                        moveStack.pop();
+                        solve(abs(x), abs(y+1), "south");
+                    }
+                    else if(maze[y][x+1] == 'X' ){
+                        moveStack.pop();
+                        solve(abs(x+1), abs(y), "east");
+                    }    
                     else if(maze[y][x+1] != '.' && maze[y][x+1] != 'X' && maze[y][x+1] != 'F'){    //If the way is shut...turn right 
                         solve(abs(x), abs(y), "north");
-                    }
-                    else if(maze[y][x+1] == 'X'){
-                        return "east";
-                    }
+                    }                                   
                     else{   //Run!
                         solve(abs(x+1), abs(y), "east");
                     }   break;
                 case "north":
-                    if(maze[y][x+1] == '.'  || maze[y][x+1] == 'X'){
+                    if(maze[y][x+1] == '.'  ){
+                        solve(abs(x+1), abs(y), "east");
+                    }
+                    else if(maze[y-1][x] == 'X'){
+                        moveStack.pop();
+                        solve(abs(x), abs(y-1), "north");
+                    }
+                    else if(maze[y][x+1] == 'X'){
+                        moveStack.pop();
                         solve(abs(x+1), abs(y), "east");
                     }
                     else if(maze[y-1][x] != '.' && maze[y-1][x] != 'X' && maze[y-1][x] != 'F'){
                         solve(abs(x), abs(y), "west");
-                    }
+                    }                    
                     else{
                         solve(abs(x), abs(y-1), "north");
                     }   break;
                 case "west":
-                    if(maze[y-1][x] == '.' || maze[y-1][x] == 'X'){
+                    if(maze[y-1][x] == '.' ){
+                        solve(abs(x), abs(y-1), "north");
+                    }
+                    else if(maze[y][x-1] == 'X'){
+                        moveStack.pop();
+                        solve(abs(x-1), abs(y), "west");
+                    }
+                    else if(maze[y-1][x] == 'X'){
+                        moveStack.pop();
                         solve(abs(x), abs(y-1), "north");
                     }
                     else if(maze[y][x-1] != '.' && maze[y][x-1] != 'X' && maze[y][x-1] != 'F'){
                         solve(abs(x), abs(y), "south");
-                    }
+                    }                    
                     else{
                         solve(abs(x-1), abs(y), "west");
                     }   break;
                 default:
-                    if(maze[y][x-1] == '.' || maze[y][x-1] == 'X'){
+                    if(maze[y][x-1] == '.' ){
+                        solve(abs(x-1), abs(y), "west");
+                    }
+                    else if(maze[y+1][x] == 'X'){
+                        moveStack.pop();
+                        solve(abs(x), abs(y+1), "south");
+                    }
+                    else if(maze[y][x-1] == 'X'){
+                        moveStack.pop();
                         solve(abs(x-1), abs(y), "west");
                     }
                     else if(maze[y+1][x] != '.' && maze[y+1][x] != 'X' && maze[y+1][x] != 'F'){
                         solve(abs(x), abs(y), "east");
                     }
+                    
                     else{
                         solve(abs(x), abs(y+1), "south");
                     }   break;
@@ -254,7 +284,7 @@ public class Maze extends JFrame {
             System.out.println("Final Time = " + finalTime);
             
         } 
-        return facing;
+ 
     }
     
     public int abs(int x)
