@@ -21,6 +21,7 @@ import javax.swing.*;
 /**
  *
  * @author hunterl
+ * @author Roy Smart
  */
 public class Maze extends JFrame {
 
